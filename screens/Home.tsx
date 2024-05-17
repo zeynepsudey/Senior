@@ -17,7 +17,7 @@ export default function Home({ navigation }) {
 
     async function getData() {
        const result = await db.getAllAsync(`SELECT * FROM Students`);
-       console.log(result);
+       //console.log(result);
     }
 
     return (

@@ -16,6 +16,8 @@ export interface Appointments {
     id: number;
     date: string;
     time: string;
-    teacher_id: number;
-    student_id: number;
+    teacherId:  number;
+    studentId: number;
+    teacher: Teachers;
+    student: Students;
 }

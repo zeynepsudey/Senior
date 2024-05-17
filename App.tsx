@@ -43,7 +43,7 @@ export default function App() {
 
   if (!dbLoaded)
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: "red"}}>
         <ActivityIndicator size={"large"} />
         <Text>Loading Database...</Text>
       </View>
