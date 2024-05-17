@@ -64,8 +64,6 @@ export default function App() {
               name="Home"
               component={Home}
               options={{
-                headerTitle: "AYBU",
-                headerLargeTitle: true,
               }}
             />
             <Stack.Screen name="Login" component={LoginScreen} />

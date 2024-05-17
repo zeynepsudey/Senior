@@ -1,16 +1,13 @@
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import * as React from 'react';
+import TeacherAppScreen from '../teacher/TeacherAppScreen'; // Eğer aynı dosya içinde değilse dosya yolunu doğru şekilde ayarlayın
 
-export default function TeacherMenu({ navigation }) {
-    const teacherId = 1; // Bu değer giriş yapan öğretmen ID'sine göre dinamik olmalıdır
+export default function TeacherMenu({ navigation, route }) {
+    const { teacherId } = route.params;
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Öğretmen Menüsü</Text>
-            <Button
-                title="Randevu Belirleme"
-                onPress={() => navigation.navigate('TeacherAppScreen', { teacherId })}
-            />
+            <TeacherAppScreen teacherId={teacherId} />
         </View>
     );
 }
@@ -18,14 +15,6 @@ export default function TeacherMenu({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        padding: 16,
         backgroundColor: '#fff',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 16,
-        textAlign: 'center',
     },
 });

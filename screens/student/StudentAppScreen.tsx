@@ -17,7 +17,7 @@ export default function StudentAppScreen() {
             const results = await db.getAllAsync('SELECT id, firstName, lastName FROM Teachers');
             setTeachers(results);
         } catch (error) {
-            console.error('Öğretmenleri getirirken bir hata oluştu:', error);
+            console.error('An error occurred while fetching teachers:', error);
         }
     };
 
@@ -27,12 +27,15 @@ export default function StudentAppScreen() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Öğretmenler</Text>
+            <Text style={styles.title}>Teachers</Text>
             <FlatList
                 data={teachers}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.teacherItem} onPress={() => handleTeacherPress(item.id)}>
+                    <TouchableOpacity
+                        style={[styles.teacherItem, { width: `${item.firstName.length * 15}px` }]}
+                        onPress={() => handleTeacherPress(item.id)}
+                    >
                         <Text style={styles.teacherName}>{`${item.firstName} ${item.lastName}`}</Text>
                     </TouchableOpacity>
                 )}
@@ -45,24 +48,30 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
+        alignItems: 'center',
         padding: 16,
-        backgroundColor: '#fff',
+        backgroundColor: '#130632',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 16,
         textAlign: 'center',
+        color: 'white',
     },
     teacherItem: {
-        padding: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
         marginVertical: 8,
-        backgroundColor: '#f9f9f9',
-        borderColor: '#ddd',
+        backgroundColor: '#A391F5',
+        borderColor: 'white',
         borderWidth: 1,
         borderRadius: 4,
+        alignItems: 'center',
     },
     teacherName: {
         fontSize: 18,
+        color: 'white',
+        fontWeight: 'bold',
     },
 });

@@ -3,8 +3,7 @@ import { View, Text, Button, Alert, FlatList, TouchableOpacity, StyleSheet } fro
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSQLiteContext } from "expo-sqlite/next";
 
-export default function TeacherAppScreen({ route }) {
-    const { teacherId } = route.params;
+export default function TeacherAppScreen({ teacherId }) {
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -136,3 +135,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
+

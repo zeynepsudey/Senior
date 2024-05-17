@@ -16,7 +16,7 @@ export default function SelectApp({ route }) {
             const results = await db.getAllAsync('SELECT * FROM Appointments WHERE teacherId = ?', [teacherId]);
             setAppointments(results);
         } catch (error) {
-            console.error('Randevuları getirirken bir hata oluştu:', error);
+            console.error('An error occurred while fetching appointments:', error);
         }
     };
 
@@ -24,30 +24,33 @@ export default function SelectApp({ route }) {
         try {
             // İlgili randevuyu seç
             // Burada seçilen randevuyu kaydetmek için uygun bir yol belirtmelisiniz
-            console.log(`Randevu seçildi: ${appointmentId}`);
+            console.log(`Appointment selected: ${appointmentId}`);
 
             // Uyarı mesajını göster
             Alert.alert(
-                "UYARI",
-                "Seçiminiz 'Randevularım' sekmesine başarıyla kaydedildi. Randevunuzu en geç randevu tarihinize 24 saat kala iptal edebilirsiniz. Randevu tarihine 24 saatten az kalan randevular iptal edilemez."
+                "SUCCESSFUL",
+                "Your selection has been successfully saved in the 'My Appointments' tab. You can cancel your appointment at least 6 hours before your appointment date. Appointments less than 6 hours before the appointment date cannot be cancelled."
             );
         } catch (error) {
-            console.error('Randevuyu işaretlerken bir hata oluştu:', error);
+            console.error('An error occurred while marking the appointment:', error);
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Öğretmenin Randevuları</Text>
+            <Text style={styles.title}>Teacher's Appointments</Text>
             <FlatList
                 data={appointments}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.appointmentItem}>
-                        <Text>{`Tarih: ${item.date}`}</Text>
-                        <Text>{`Saat: ${item.time}`}</Text>
-                        <TouchableOpacity onPress={() => handleSelectAppointment(item.id)}>
-                            <Text style={styles.selectButton}>Seç</Text>
+                        <Text style={styles.appList}>{`Date: ${item.date}`}</Text>
+                        <Text style={styles.appList}>{`Time: ${item.time}`}</Text>
+                        <TouchableOpacity
+                            style={styles.selectButtonContainer}
+                            onPress={() => handleSelectAppointment(item.id)}
+                        >
+                            <Text style={styles.selectButton}>Select</Text>
                         </TouchableOpacity>
                     </View>
                 )}
@@ -60,26 +63,43 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
+        alignItems: 'center',
         padding: 16,
-        backgroundColor: '#fff',
+        backgroundColor: '#130632',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 16,
         textAlign: 'center',
+        color: 'white',
     },
     appointmentItem: {
         padding: 16,
-        marginVertical: 8,
-        backgroundColor: '#f9f9f9',
-        borderColor: '#ddd',
-        borderWidth: 1,
+        marginVertical: 15,
+        backgroundColor: 'white',
+        borderColor: '#A391F5',
+        borderWidth: 2,
         borderRadius: 4,
+        alignItems: 'center',
+        width: '80%',
+    },
+    selectButtonContainer: {
+        backgroundColor: '#A391F5',
+        marginTop: 8,
+        borderRadius: 4,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderWidth: 2,
+        borderColor: '#130632',
     },
     selectButton: {
-        color: 'blue',
-        textAlign: 'center',
-        marginTop: 8,
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
+    appList: {
+        fontWeight: 'bold',
+        textAlign: 'center',
+    }
 });
