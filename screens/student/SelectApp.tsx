@@ -20,10 +20,17 @@ export default function SelectApp({ route }) {
         }
     };
 
-    const handleSelectAppointment = async (appointmentId) => {
+    const handleSelectAppointment = async (appointment) => {
         try {
             // Seçilen randevuyu öğrenciye atama
-            await db.executeAsync('UPDATE Appointments SET studentId = ? WHERE id = ?', [studentId, appointmentId]);
+            await db.runAsync('UPDATE Appointments SET studentId = ? WHERE id = ?', [studentId, appointment.id]);
+
+            // Konsolda seçimi yazdırma
+            console.log('Appointment selected:', {
+                id: appointment.id,
+                date: appointment.date,
+                time: appointment.time,
+            });
 
             // Uyarı mesajını göster
             Alert.alert(
@@ -47,7 +54,7 @@ export default function SelectApp({ route }) {
                         <Text style={styles.appList}>{`Time: ${item.time}`}</Text>
                         <TouchableOpacity
                             style={styles.selectButtonContainer}
-                            onPress={() => handleSelectAppointment(item.id)}
+                            onPress={() => handleSelectAppointment(item)}
                         >
                             <Text style={styles.selectButton}>Select</Text>
                         </TouchableOpacity>

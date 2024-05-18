@@ -66,13 +66,13 @@ export default function App() {
               options={{
               }}
             />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="StudentMenu" component={StudentMenu} />
-            <Stack.Screen name="TeacherMenu" component={TeacherMenu} />
-            <Stack.Screen name="StudentAppList" component={StudentAppList} />
-            <Stack.Screen name="StudentAppScreen" component={StudentAppScreen} />
-            <Stack.Screen name="TeacherAppScreen" component={TeacherAppScreen} />
-            <Stack.Screen name="SelectApp" component={SelectApp} />
+            <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
+            <Stack.Screen name="StudentMenu" component={StudentMenu} options={{ title: 'Menu' }}/>
+            <Stack.Screen name="TeacherMenu" component={TeacherMenu} options={{ title: 'Menu' }}/>
+            <Stack.Screen name="StudentAppList" component={StudentAppList} options={{ title: 'My Appointments' }}/>
+            <Stack.Screen name="StudentAppScreen" component={StudentAppScreen} options={{ title: 'Get Appointment' }}/>
+            <Stack.Screen name="TeacherAppScreen" component={TeacherAppScreen} options={{ title: 'Create Appointment' }}/>
+            <Stack.Screen name="SelectApp" component={SelectApp} options={{ title: 'Select Appointment' }}/>
           </Stack.Navigator>
         </SQLiteProvider>
       </React.Suspense>
