@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Alert, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSQLiteContext } from "expo-sqlite/next";
+import { Ionicons } from '@expo/vector-icons'; // Örnek olarak Ionicons kullanıyorum, kendi kullanmak istediğiniz ikon kütüphanesini kullanabilirsiniz
 
 export default function TeacherAppScreen({ route }) {
     const { teacherId } = route.params;
@@ -72,6 +73,7 @@ export default function TeacherAppScreen({ route }) {
         <View style={styles.container}>
 
             <TouchableOpacity style={styles.saveButton} onPress={() => setShowDatePicker(true)}>
+                <Ionicons name="calendar" size={24} color="white" />
                 <Text style={styles.saveButtonText}>Select Date</Text>
             </TouchableOpacity>
             {showDatePicker && (
@@ -88,6 +90,7 @@ export default function TeacherAppScreen({ route }) {
             )}
 
             <TouchableOpacity style={styles.saveButton} onPress={() => setShowTimePicker(true)}>
+                <Ionicons name="time" size={24} color="white" />
                 <Text style={styles.saveButtonText}>Select Time</Text>
             </TouchableOpacity>
             {showTimePicker && (
@@ -104,6 +107,7 @@ export default function TeacherAppScreen({ route }) {
             )}
 
             <TouchableOpacity style={styles.saveButton} onPress={handleSaveAppointment}>
+                <Ionicons name="save" size={24} color="white" />
                 <Text style={styles.saveButtonText}>Save</Text>
             </TouchableOpacity>
 
@@ -158,6 +162,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         alignSelf: 'center',
+        flexDirection: 'row', // Add this to align icon and text horizontally
         width: 200,
         borderWidth: 2,
         borderColor: 'white',
@@ -167,6 +172,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
+        marginLeft: 10, // Add some space between icon and text
     },
     deleteButton: {
         backgroundColor: '#A391F5',
