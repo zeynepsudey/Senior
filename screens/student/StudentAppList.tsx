@@ -1,8 +1,10 @@
+// StudentAppList.js
+
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button, Alert } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useSQLiteContext } from "expo-sqlite/next";
 
-export default function StudentAppList() {
+export default function StudentAppList({ studentId }) {
     const [selectedAppointments, setSelectedAppointments] = useState([]);
     const db = useSQLiteContext();
 
@@ -12,7 +14,7 @@ export default function StudentAppList() {
 
     const fetchSelectedAppointments = async () => {
         try {
-            const result = await db.getAllAsync('SELECT Appointments.*, Teachers.firstName, Teachers.lastName FROM Appointments INNER JOIN Teachers ON Appointments.teacherId = Teachers.id');
+            const result = await db.getAllAsync('SELECT Appointments.*, Teachers.firstName, Teachers.lastName FROM Appointments INNER JOIN Teachers ON Appointments.teacherId = Teachers.id WHERE Appointments.studentId = ?', [studentId]);
             setSelectedAppointments(result);
         } catch (error) {
             console.error('An error occurred while fetching appointments:', error);
@@ -66,6 +68,7 @@ export default function StudentAppList() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+       
         justifyContent: 'center',
         padding: 16,
         backgroundColor: '#130632',

@@ -3,7 +3,8 @@ import { View, Text, Button, Alert, FlatList, TouchableOpacity, StyleSheet } fro
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSQLiteContext } from "expo-sqlite/next";
 
-export default function TeacherAppScreen({ teacherId }) {
+export default function TeacherAppScreen({ route }) {
+    const { teacherId } = route.params;
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -22,11 +23,11 @@ export default function TeacherAppScreen({ teacherId }) {
                 'INSERT INTO Appointments (teacherId, date, time) VALUES (?, ?, ?)',
                 [teacherId, date.toISOString().split('T')[0], time.toTimeString().split(' ')[0]]
             );
-            Alert.alert('Başarılı', 'Randevu kaydedildi.');
-            fetchAppointments(); // Randevuları güncelle
+            Alert.alert('Success', 'Appointment saved.');
+            fetchAppointments();
         } catch (error) {
             console.error(error);
-            Alert.alert('Hata', 'Randevu kaydedilirken bir hata oluştu.');
+            Alert.alert('Error', 'An error occurred while saving the appointment.');
         }
     };
 
@@ -35,26 +36,26 @@ export default function TeacherAppScreen({ teacherId }) {
             const results = await db.getAllAsync('SELECT * FROM Appointments WHERE teacherId = ?', [teacherId]);
             setAppointments(results);
         } catch (error) {
-            console.error('Randevuları getirirken bir hata oluştu:', error);
+            console.error('An error occurred while fetching appointments:', error);
         }
     };
 
     const handleDeleteAppointment = async (id) => {
         try {
             await db.getAllAsync('DELETE FROM Appointments WHERE id = ?', [id]);
-            Alert.alert('Başarılı', 'Randevu silindi.');
-            fetchAppointments(); // Randevuları güncelle
+            Alert.alert('Success', 'Appointment deleted.');
+            fetchAppointments();
         } catch (error) {
-            console.error('Randevuyu silerken bir hata oluştu:', error);
-            Alert.alert('Hata', 'Randevuyu silerken bir hata oluştu.');
+            console.error('An error occurred while deleting the appointment:', error);
+            Alert.alert('Error', 'An error occurred while deleting the appointment.');
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Randevu Belirleme</Text>
+            <Text style={styles.title}>Create Appointment</Text>
 
-            <Button title="Tarih Seç" onPress={() => setShowDatePicker(true)} />
+            <Button title="Select Date" onPress={() => setShowDatePicker(true)} />
             {showDatePicker && (
                 <DateTimePicker
                     value={date}
@@ -68,7 +69,7 @@ export default function TeacherAppScreen({ teacherId }) {
                 />
             )}
 
-            <Button title="Saat Seç" onPress={() => setShowTimePicker(true)} />
+            <Button title="Select Time" onPress={() => setShowTimePicker(true)} />
             {showTimePicker && (
                 <DateTimePicker
                     value={time}
@@ -82,17 +83,17 @@ export default function TeacherAppScreen({ teacherId }) {
                 />
             )}
 
-            <Button title="Kaydet" onPress={handleSaveAppointment} />
+            <Button title="Save" onPress={handleSaveAppointment} />
 
             <FlatList
                 data={appointments}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.appointmentItem}>
-                        <Text>{`Tarih: ${item.date}`}</Text>
-                        <Text>{`Saat: ${item.time}`}</Text>
+                        <Text>{`Date: ${item.date}`}</Text>
+                        <Text>{`Time: ${item.time}`}</Text>
                         <TouchableOpacity onPress={() => handleDeleteAppointment(item.id)} style={styles.deleteButton}>
-                            <Text style={styles.deleteButtonText}>Sil</Text>
+                            <Text style={styles.deleteButtonText}>Delete</Text>
                         </TouchableOpacity>
                     </View>
                 )}
@@ -135,4 +136,3 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
-

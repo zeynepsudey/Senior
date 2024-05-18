@@ -1,9 +1,11 @@
+// SelectApp.js
+
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useSQLiteContext } from "expo-sqlite/next";
 
 export default function SelectApp({ route }) {
-    const { teacherId } = route.params;
+    const { teacherId, studentId } = route.params;
     const [appointments, setAppointments] = useState([]);
     const db = useSQLiteContext();
 
@@ -22,9 +24,8 @@ export default function SelectApp({ route }) {
 
     const handleSelectAppointment = async (appointmentId) => {
         try {
-            // İlgili randevuyu seç
-            // Burada seçilen randevuyu kaydetmek için uygun bir yol belirtmelisiniz
-            console.log(`Appointment selected: ${appointmentId}`);
+            // Seçilen randevuyu öğrenciye atama
+            await db.getAllAsync('UPDATE Appointments SET studentId = ? WHERE id = ?', [studentId, appointmentId]);
 
             // Uyarı mesajını göster
             Alert.alert(
