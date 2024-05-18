@@ -22,8 +22,9 @@ export default function LoginScreen({ navigation }) {
             );
 
             if (studentResult.length > 0) {
+                const studentId = studentResult[0].id;
                 Alert.alert('SUCCESSFUL', 'Login as a student!');
-                navigation.navigate('StudentMenu');
+                navigation.navigate('StudentMenu', { studentId });
                 return;
             }
 
@@ -34,9 +35,9 @@ export default function LoginScreen({ navigation }) {
             );
 
             if (teacherResult.length > 0) {
-                const teacherId = teacherResult[0].id; // Öğretmen ID'sini al
+                const teacherId = teacherResult[0].id;
                 Alert.alert('SUCCESSFUL', 'Login as a teacher!');
-                navigation.navigate('TeacherMenu', { teacherId }); // Öğretmen ID'si ile TeacherMenu'ye yönlendir
+                navigation.navigate('TeacherMenu', { teacherId });
                 return;
             }
 

@@ -1,5 +1,3 @@
-// SelectApp.js
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useSQLiteContext } from "expo-sqlite/next";
@@ -15,7 +13,7 @@ export default function SelectApp({ route }) {
 
     const fetchAppointments = async () => {
         try {
-            const results = await db.getAllAsync('SELECT * FROM Appointments WHERE teacherId = ?', [teacherId]);
+            const results = await db.getAllAsync('SELECT * FROM Appointments WHERE teacherId = ? AND studentId IS NULL', [teacherId]);
             setAppointments(results);
         } catch (error) {
             console.error('An error occurred while fetching appointments:', error);
@@ -25,7 +23,7 @@ export default function SelectApp({ route }) {
     const handleSelectAppointment = async (appointmentId) => {
         try {
             // Seçilen randevuyu öğrenciye atama
-            await db.getAllAsync('UPDATE Appointments SET studentId = ? WHERE id = ?', [studentId, appointmentId]);
+            await db.executeAsync('UPDATE Appointments SET studentId = ? WHERE id = ?', [studentId, appointmentId]);
 
             // Uyarı mesajını göster
             Alert.alert(
@@ -83,7 +81,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 4,
         alignItems: 'center',
-        width: '80%',
+        width: '100%',
     },
     selectButtonContainer: {
         backgroundColor: '#A391F5',

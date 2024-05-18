@@ -1,15 +1,15 @@
-// StudentMenu.tsx
-
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import * as React from 'react';
 
-export default function StudentMenu({ navigation }) {
+export default function StudentMenu({ navigation, route }) {
+    const { studentId } = route.params;
+
     const handleAppointments = () => {
-        navigation.navigate('StudentAppList');
+        navigation.navigate('StudentAppList', { studentId });
     };
 
     const handleMakeAppointment = () => {
-        navigation.navigate('StudentAppScreen');
+        navigation.navigate('StudentAppScreen', { studentId });
     };
 
     return (

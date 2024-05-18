@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Alert, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Alert, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSQLiteContext } from "expo-sqlite/next";
 
@@ -19,14 +19,25 @@ export default function TeacherAppScreen({ route }) {
 
     const handleSaveAppointment = async () => {
         try {
-            await db.getAllAsync(
+            const dateStr = date.toISOString().split('T')[0];
+            const timeStr = time.toTimeString().split(' ')[0];
+
+            const result = await db.getAllAsync(
                 'INSERT INTO Appointments (teacherId, date, time) VALUES (?, ?, ?)',
-                [teacherId, date.toISOString().split('T')[0], time.toTimeString().split(' ')[0]]
+                [teacherId, dateStr, timeStr]
             );
+
+            console.log('Appointment saved:', {
+                teacherId,
+                date: dateStr,
+                time: timeStr,
+                result
+            });
+
             Alert.alert('Success', 'Appointment saved.');
             fetchAppointments();
         } catch (error) {
-            console.error(error);
+            console.error('An error occurred while saving the appointment:', error);
             Alert.alert('Error', 'An error occurred while saving the appointment.');
         }
     };
@@ -42,7 +53,13 @@ export default function TeacherAppScreen({ route }) {
 
     const handleDeleteAppointment = async (id) => {
         try {
-            await db.getAllAsync('DELETE FROM Appointments WHERE id = ?', [id]);
+            const result = await db.getAllAsync('DELETE FROM Appointments WHERE id = ?', [id]);
+
+            console.log('Appointment deleted:', {
+                id,
+                result
+            });
+
             Alert.alert('Success', 'Appointment deleted.');
             fetchAppointments();
         } catch (error) {
@@ -53,9 +70,10 @@ export default function TeacherAppScreen({ route }) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Create Appointment</Text>
 
-            <Button title="Select Date" onPress={() => setShowDatePicker(true)} />
+            <TouchableOpacity style={styles.saveButton} onPress={() => setShowDatePicker(true)}>
+                <Text style={styles.saveButtonText}>Select Date</Text>
+            </TouchableOpacity>
             {showDatePicker && (
                 <DateTimePicker
                     value={date}
@@ -69,7 +87,9 @@ export default function TeacherAppScreen({ route }) {
                 />
             )}
 
-            <Button title="Select Time" onPress={() => setShowTimePicker(true)} />
+            <TouchableOpacity style={styles.saveButton} onPress={() => setShowTimePicker(true)}>
+                <Text style={styles.saveButtonText}>Select Time</Text>
+            </TouchableOpacity>
             {showTimePicker && (
                 <DateTimePicker
                     value={time}
@@ -83,15 +103,17 @@ export default function TeacherAppScreen({ route }) {
                 />
             )}
 
-            <Button title="Save" onPress={handleSaveAppointment} />
+            <TouchableOpacity style={styles.saveButton} onPress={handleSaveAppointment}>
+                <Text style={styles.saveButtonText}>Save</Text>
+            </TouchableOpacity>
 
             <FlatList
                 data={appointments}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.appointmentItem}>
-                        <Text>{`Date: ${item.date}`}</Text>
-                        <Text>{`Time: ${item.time}`}</Text>
+                        <Text style={styles.appList}>{`Date: ${item.date}`}</Text>
+                        <Text style={styles.appList}>{`Time: ${item.time}`}</Text>
                         <TouchableOpacity onPress={() => handleDeleteAppointment(item.id)} style={styles.deleteButton}>
                             <Text style={styles.deleteButtonText}>Delete</Text>
                         </TouchableOpacity>
@@ -106,33 +128,62 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
+        alignItems: 'center',
         padding: 16,
-        backgroundColor: '#fff',
+        backgroundColor: '#130632',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 16,
         textAlign: 'center',
+        color: 'white',
     },
     appointmentItem: {
         padding: 16,
-        marginVertical: 8,
-        backgroundColor: '#f9f9f9',
-        borderColor: '#ddd',
-        borderWidth: 1,
+        marginVertical: 15,
+        backgroundColor: 'white',
+        borderColor: '#A391F5',
+        borderWidth: 2,
         borderRadius: 4,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        width: '100%',
+    },
+    saveButton: {
+        backgroundColor: '#A391F5',
+        marginTop: 10,
+        marginBottom: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: 200,
+        borderWidth: 2,
+        borderColor: 'white',
+    },
+    saveButtonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
     deleteButton: {
-        backgroundColor: '#ff6347',
-        padding: 8,
+        backgroundColor: '#A391F5',
+        marginTop: 8,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         borderRadius: 4,
+        borderWidth: 2,
+        borderColor: '#130632',
     },
     deleteButtonText: {
-        color: '#fff',
+        color: 'white',
+        fontSize: 16,
         fontWeight: 'bold',
     },
+    appList: {
+        fontWeight: 'bold',
+        textAlign: 'center',
+    }
 });
