@@ -3,6 +3,7 @@ export interface User {
     name: string;
     email: string;
     password: string;
+    appointment_id: number;
 }
 export interface Teachers {
     teacher_id: number;
