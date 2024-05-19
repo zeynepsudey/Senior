@@ -14,7 +14,7 @@ export default function StudentAppScreen() {
 
     const fetchTeachers = async () => {
         try {
-            const results = await db.getAllAsync('SELECT id, firstName, lastName FROM Teachers');
+            const results = await db.getAllAsync('SELECT teacher_id, name FROM Teachers');
             setTeachers(results);
         } catch (error) {
             console.error('An error occurred while fetching teachers:', error);
@@ -30,13 +30,13 @@ export default function StudentAppScreen() {
             <Text style={styles.title}>Teachers</Text>
             <FlatList
                 data={teachers}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.teacher_id.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        style={[styles.teacherItem, { width: `${item.firstName.length * 15}px` }]}
-                        onPress={() => handleTeacherPress(item.id)}
+                        style={[styles.teacherItem, { width: `${item.name.length * 10}px` }]}
+                        onPress={() => handleTeacherPress(item.teacher_id)}
                     >
-                        <Text style={styles.teacherName}>{`${item.firstName} ${item.lastName}`}</Text>
+                        <Text style={styles.teacherName}>{item.name}</Text>
                     </TouchableOpacity>
                 )}
             />

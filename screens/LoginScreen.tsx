@@ -17,14 +17,15 @@ export default function LoginScreen({ navigation }) {
         try {
             // Students tablosunu kontrol et
             const studentResult = await db.getAllAsync(
-                'SELECT * FROM Students WHERE email = ? AND password = ?',
+                'SELECT * FROM User WHERE email = ? AND password = ?',
                 [email, password]
             );
 
             if (studentResult.length > 0) {
-                const studentId = studentResult[0].id;
+                const studentInfo = studentResult[0];
+                console.log('Student logged in:', studentInfo); // Tüm öğrenci bilgilerini yazdır
                 Alert.alert('SUCCESSFUL', 'Login as a student!');
-                navigation.navigate('StudentMenu', { studentId });
+                navigation.navigate('StudentMenu', { studentId: studentInfo.user_id });
                 return;
             }
 
@@ -35,9 +36,10 @@ export default function LoginScreen({ navigation }) {
             );
 
             if (teacherResult.length > 0) {
-                const teacherId = teacherResult[0].id;
+                const teacherInfo = teacherResult[0];
+                console.log('Teacher logged in:', teacherInfo); // Tüm öğretmen bilgilerini yazdır
                 Alert.alert('SUCCESSFUL', 'Login as a teacher!');
-                navigation.navigate('TeacherMenu', { teacherId });
+                navigation.navigate('TeacherMenu', { teacherId: teacherInfo.teacher_id });
                 return;
             }
 

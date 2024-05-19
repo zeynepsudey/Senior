@@ -1,23 +1,24 @@
-export interface Students {
-    id: number;
-    firstName: string;
-    lastName: string;
+export interface User {
+    user_id: number;
+    name: string;
     email: string;
     password: string;
 }
 export interface Teachers {
-    id: number;
-    firstName: string;
-    lastName: string;
+    teacher_id: number;
+    name: string;
     email: string;
     password: string;
 }
 export interface Appointments {
-    id: number;
+    appointment_id: number;
     date: string;
     time: string;
-    teacherId:  number;
-    studentId: number;
-    teacher: Teachers;
-    student: Students;
+    availability_id: number;
+}
+export interface Teacher_Availability {
+    availability_id: number;
+    date: string;
+    time: string;
+    teacher_id: number;
 }

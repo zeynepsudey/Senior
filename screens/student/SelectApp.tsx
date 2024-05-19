@@ -13,7 +13,7 @@ export default function SelectApp({ route }) {
 
     const fetchAppointments = async () => {
         try {
-            const results = await db.getAllAsync('SELECT * FROM Appointments WHERE teacherId = ? AND studentId IS NULL', [teacherId]);
+            const results = await db.getAllAsync('SELECT * FROM Teacher_Availability WHERE teacher_id = ?', [teacherId]);
             setAppointments(results);
         } catch (error) {
             console.error('An error occurred while fetching appointments:', error);
@@ -23,13 +23,15 @@ export default function SelectApp({ route }) {
     const handleSelectAppointment = async (appointment) => {
         try {
             // Seçilen randevuyu öğrenciye atama
-            await db.runAsync('UPDATE Appointments SET studentId = ? WHERE id = ?', [studentId, appointment.id]);
+            await db.runAsync('UPDATE User SET appointment_id = ? WHERE user_id = ?', [appointment.availability_id, studentId]);
 
             // Konsolda seçimi yazdırma
             console.log('Appointment selected:', {
-                id: appointment.id,
+                id: appointment.availability_id,
                 date: appointment.date,
                 time: appointment.time,
+                teacherId: teacherId,
+                studentId: studentId,
             });
 
             // Uyarı mesajını göster
@@ -47,7 +49,7 @@ export default function SelectApp({ route }) {
             <Text style={styles.title}>Teacher's Appointments</Text>
             <FlatList
                 data={appointments}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.availability_id.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.appointmentItem}>
                         <Text style={styles.appList}>{`Date: ${item.date}`}</Text>

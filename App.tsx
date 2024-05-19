@@ -20,8 +20,8 @@ import SelectApp from "./screens/student/SelectApp";
 const Stack = createNativeStackNavigator();
 
 const loadDatabase = async () => {
-  const dbName = "mySQLiteDB.db";
-  const dbAsset = require("./assets/mySQLiteDB.db");
+  const dbName = "myApp2DB.db";
+  const dbAsset = require("./assets/myApp2DB.db");
   const dbUri = Asset.fromModule(dbAsset).uri;
   const dbFilePath = `${FileSystem.documentDirectory}SQLite/${dbName}`;
 
@@ -61,7 +61,7 @@ export default function App() {
           </View>
         }
       >
-        <SQLiteProvider databaseName="mySQLiteDB.db" useSuspense>
+        <SQLiteProvider databaseName="myApp2DB.db" useSuspense>
           <Stack.Navigator>
             <Stack.Screen
               name="Home"

@@ -25,7 +25,7 @@ export default function StudentAppList({ route }) {
             <Text style={styles.title}>My Appointments</Text>
             <FlatList
                 data={appointments}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.appointment_id.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.appointmentItem}>
                         <Text style={styles.appList}>{`Date: ${item.date}`}</Text>

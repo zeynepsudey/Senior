@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Alert, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSQLiteContext } from "expo-sqlite/next";
-import { Ionicons } from '@expo/vector-icons'; // Örnek olarak Ionicons kullanıyorum, kendi kullanmak istediğiniz ikon kütüphanesini kullanabilirsiniz
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TeacherAppScreen({ route }) {
-    const { teacherId } = route.params;
+    const { teacherId } = route.params; // teacherId verisi route.params'dan alınır
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -23,17 +23,10 @@ export default function TeacherAppScreen({ route }) {
             const dateStr = date.toISOString().split('T')[0];
             const timeStr = time.toTimeString().split(' ')[0];
 
-            const result = await db.getAllAsync(
-                'INSERT INTO Appointments (teacherId, date, time) VALUES (?, ?, ?)',
-                [teacherId, dateStr, timeStr]
+            await db.runAsync(
+                'INSERT INTO Teacher_Availability (date, time, teacher_id) VALUES (?, ?, ?)',
+                [dateStr, timeStr, teacherId]
             );
-
-            console.log('Appointment saved:', {
-                teacherId,
-                date: dateStr,
-                time: timeStr,
-                result
-            });
 
             Alert.alert('Success', 'Appointment saved.');
             fetchAppointments();
@@ -45,8 +38,11 @@ export default function TeacherAppScreen({ route }) {
 
     const fetchAppointments = async () => {
         try {
-            const results = await db.getAllAsync('SELECT * FROM Appointments WHERE teacherId = ?', [teacherId]);
-            setAppointments(results);
+            const result = await db.getAllAsync(
+                'SELECT * FROM Teacher_Availability WHERE teacher_id = ?',
+                [teacherId]
+            );
+            setAppointments(result);
         } catch (error) {
             console.error('An error occurred while fetching appointments:', error);
         }
@@ -54,12 +50,7 @@ export default function TeacherAppScreen({ route }) {
 
     const handleDeleteAppointment = async (id) => {
         try {
-            const result = await db.getAllAsync('DELETE FROM Appointments WHERE id = ?', [id]);
-
-            console.log('Appointment deleted:', {
-                id,
-                result
-            });
+            await db.runAsync('DELETE FROM Teacher_Availability WHERE availability_id = ?', [id]);
 
             Alert.alert('Success', 'Appointment deleted.');
             fetchAppointments();
@@ -71,7 +62,6 @@ export default function TeacherAppScreen({ route }) {
 
     return (
         <View style={styles.container}>
-
             <TouchableOpacity style={styles.saveButton} onPress={() => setShowDatePicker(true)}>
                 <Ionicons name="calendar" size={24} color="white" />
                 <Text style={styles.saveButtonText}>Select Date</Text>
@@ -113,12 +103,12 @@ export default function TeacherAppScreen({ route }) {
 
             <FlatList
                 data={appointments}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.availability_id.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.appointmentItem}>
                         <Text style={styles.appList}>{`Date: ${item.date}`}</Text>
                         <Text style={styles.appList}>{`Time: ${item.time}`}</Text>
-                        <TouchableOpacity onPress={() => handleDeleteAppointment(item.id)} style={styles.deleteButton}>
+                        <TouchableOpacity onPress={() => handleDeleteAppointment(item.availability_id)} style={styles.deleteButton}>
                             <Text style={styles.deleteButtonText}>Delete</Text>
                         </TouchableOpacity>
                     </View>
@@ -162,7 +152,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         alignSelf: 'center',
-        flexDirection: 'row', // Add this to align icon and text horizontally
+        flexDirection: 'row',
         width: 200,
         borderWidth: 2,
         borderColor: 'white',
@@ -172,7 +162,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginLeft: 10, // Add some space between icon and text
+        marginLeft: 10,
     },
     deleteButton: {
         backgroundColor: '#A391F5',
