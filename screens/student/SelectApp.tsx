@@ -31,7 +31,7 @@ export default function SelectApp({ route }) {
                 date: appointment.date,
                 time: appointment.time,
                 teacherId: teacherId,
-                studentId: studentId,
+                user_id: studentId,
             });
 
             // Uyarı mesajını göster

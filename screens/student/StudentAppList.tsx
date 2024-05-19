@@ -13,7 +13,7 @@ export default function StudentAppList({ route }) {
 
     const fetchStudentAppointments = async () => {
         try {
-            const results = await db.getAllAsync('SELECT * FROM Appointments WHERE studentId = ?', [studentId]);
+            const results = await db.getAllAsync('SELECT * FROM Appointments WHERE appointment_id = ?', [studentId]);
             setAppointments(results);
         } catch (error) {
             console.error('An error occurred while fetching student appointments:', error);
