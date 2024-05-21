@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 4,
         alignItems: 'center',
-        width: '80%',
+        width: '100%',
     },
     appList: {
         fontWeight: 'bold',

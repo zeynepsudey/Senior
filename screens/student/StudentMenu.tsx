@@ -2,14 +2,14 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import * as React from 'react';
 
 export default function StudentMenu({ navigation, route }) {
-    const { user_id } = route.params;
+    const { studentId } = route.params;
 
     const handleAppointments = () => {
-        navigation.navigate('StudentAppList', { user_id });
+        navigation.navigate('StudentAppList', { studentId });
     };
 
     const handleMakeAppointment = () => {
-        navigation.navigate('StudentAppScreen', { user_id });
+        navigation.navigate('StudentAppScreen', { studentId });
     };
 
     return (

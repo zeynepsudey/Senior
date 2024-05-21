@@ -22,8 +22,13 @@ export default function SelectApp({ route }) {
 
     const handleSelectAppointment = async (appointment) => {
         try {
-            // Seçilen randevuyu öğrenciye atama
-            await db.runAsync('UPDATE User SET appointment_id = ? WHERE user_id = ?', [appointment.availability_id, studentId]);
+            // Randevuyu Appointments tablosuna ekleme
+            await db.runAsync('INSERT INTO Appointments (date, time, availability_id, user_id) VALUES (?, ?, ?, ?)', 
+                [appointment.date, appointment.time, appointment.availability_id, studentId]);
+
+            // User tablosunu güncelleme
+            await db.runAsync('UPDATE User SET appointment_id = ? WHERE user_id = ?', 
+                [appointment.availability_id, studentId]);
 
             // Konsolda seçimi yazdırma
             console.log('Appointment selected:', {
